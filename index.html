@@ -7,10 +7,12 @@
   <meta name="description" content="শুনছি তোমায় — safe listening, calm tools, and mental support platform." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a href="tel:999" class="sos-floating-btn" title="জরুরি কল">SOS</a>
+
   <div class="site-shell">
     <header class="site-header">
       <div class="container nav-wrap">
@@ -28,7 +30,7 @@
           <button data-route="journal">Journal</button>
           <a href="admin.html" class="admin-link">Admin</a>
         </nav>
-        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+        <button class="menu-toggle" id="menuToggle">☰</button>
       </div>
     </header>
 
@@ -36,16 +38,15 @@
       <section class="hero section active" id="homeSection">
         <div class="container hero-grid">
           <div class="hero-copy reveal">
-            <span class="pill">Safe • Calm • Human Support</span>
+            <span class="pill" id="timeGreeting">রাতের আকাশটা আজ খুব শান্ত...</span>
             <h2>কথা বলো, মন হালকা করো, একটু শান্ত হও।</h2>
-            <p id="aboutText">শুনছি তোমায় একটি calm এবং supportive mental wellness platform, যেখানে কেউ চাইলে নাম গোপন রেখে নিজের কথা জানাতে পারে, breathing exercise করতে পারে, simple mind tool ব্যবহার করতে পারে এবং নিজের জন্য একটু safe জায়গা খুঁজে নিতে পারে।</p>
+            <p id="aboutText">শুনছি তোমায় একটি calm এবং supportive mental wellness platform...</p>
             <div class="hero-actions">
               <button class="btn btn-primary" data-route="support" id="heroPrimaryButton">কথা বলতে চাই</button>
-              <button class="btn btn-secondary" data-route="calm" id="heroSecondaryButton">এখনই একটু শান্ত হতে চাই</button>
+              <button class="btn btn-secondary" data-route="calm" id="heroSecondaryButton">একটু শান্ত হতে চাই</button>
             </div>
             <div class="hero-contact-row">
               <span class="contact-chip">📞 <strong id="phoneDisplay">0969187260</strong></span>
-              <span class="contact-chip">💬 Direct support</span>
               <span class="contact-chip">🛡️ Privacy-first</span>
             </div>
           </div>
@@ -55,99 +56,29 @@
         </div>
       </section>
 
-      <section class="quick-actions section active">
-        <div class="container grid-3">
-          <article class="card reveal">
-            <div class="icon-box">💌</div>
-            <h3>Direct Connect</h3>
-            <p>Form fill করে সরাসরি আমাদের কাছে message পাঠাও। user login লাগবে না।</p>
-            <button class="text-link" data-route="support">Open support →</button>
-          </article>
-          <article class="card reveal delay-1">
-            <div class="icon-box">🌿</div>
-            <h3>Calm Now</h3>
-            <p>Breathing, focus tool আর simple exercise দিয়ে নিজেকে একটু শান্ত রাখো।</p>
-            <button class="text-link" data-route="calm">Try tools →</button>
-          </article>
-          <article class="card reveal delay-2">
-            <div class="icon-box">📝</div>
-            <h3>Private Journal</h3>
-            <p>যা মনে আসে লিখে ফেলো। এটা তোমার browser-এ private ভাবে save থাকবে।</p>
-            <button class="text-link" data-route="journal">Open journal →</button>
-          </article>
-        </div>
-      </section>
-
-      <section class="feature-area section active">
-        <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">WHAT YOU CAN DO HERE</span>
-            <h2>এই website এমনভাবে করা হয়েছে যেন stressed user খুব সহজে support পায়।</h2>
-          </div>
-          <div class="grid-4">
-            <article class="card soft reveal">
-              <div class="icon-box">🤝</div>
-              <h3>Talk to Us</h3>
-              <p>Anonymous message পাঠাও বা callback request দাও।</p>
-            </article>
-            <article class="card soft reveal delay-1">
-              <div class="icon-box">💨</div>
-              <h3>Breathing Tool</h3>
-              <p>শান্তভাবে শ্বাস নিয়ে panic বা stress একটু কমাও।</p>
-            </article>
-            <article class="card soft reveal delay-2">
-              <div class="icon-box">🧠</div>
-              <h3>Mind Game</h3>
-              <p>Simple calming focus game দিয়ে attention ফিরিয়ে আনো।</p>
-            </article>
-            <article class="card soft reveal delay-3">
-              <div class="icon-box">🫶</div>
-              <h3>Exercises</h3>
-              <p>Grounding, self-soothing এবং small mental exercises।</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
       <section class="support-page section hidden" id="supportSection">
         <div class="container page-head">
           <span class="eyebrow">GET SUPPORT</span>
-          <h2>user login ছাড়াই message পাঠানো যাবে।</h2>
+          <h2>মাঝরাতে যখন বুকের ভেতর হু হু করে ওঠে, আমাদের জানিও।</h2>
         </div>
         <div class="container split-layout">
           <article class="card large reveal">
-            <h3>আমাদের সাথে সরাসরি যোগাযোগ</h3>
             <form id="supportForm" class="stack-form">
               <div class="field-row two-col">
-                <div>
-                  <label for="name">নাম (optional)</label>
-                  <input id="name" name="name" type="text" placeholder="তোমার নাম" />
-                </div>
-                <div>
-                  <label for="phone">ফোন (optional)</label>
-                  <input id="phone" name="phone" type="text" placeholder="ফোন নম্বর" />
-                </div>
+                <div><label>নাম (optional)</label><input name="name" type="text" placeholder="তোমার নাম" /></div>
+                <div><label>ফোন (optional)</label><input name="phone" type="text" placeholder="ফোন নম্বর" /></div>
               </div>
               <div>
-                <label for="category">সমস্যার ধরন</label>
-                <select id="category" name="category">
-                  <option>Depression</option>
-                  <option>Anxiety</option>
-                  <option>Relationship</option>
-                  <option>Family Pressure</option>
-                  <option>Study Stress</option>
-                  <option>Loneliness</option>
-                  <option>Other</option>
+                <label>সমস্যার ধরন</label>
+                <select name="category">
+                  <option>Depression</option><option>Anxiety</option><option>Loneliness</option><option>Other</option>
                 </select>
               </div>
               <div>
-                <label for="message">তোমার মনের কথা লিখো</label>
-                <textarea id="message" name="message" rows="7" required placeholder="তুমি যা বলতে চাও এখানে লিখে দাও..."></textarea>
+                <label>তোমার মনের কথা লিখো</label>
+                <textarea name="message" rows="7" required placeholder="বুকের ভেতর জমানো কথাগুলো লিখে ফেলো..."></textarea>
               </div>
-              <label class="checkbox-row">
-                <input type="checkbox" id="callback" name="callback" />
-                <span>আমি চাই আপনারা আমাকে পরে contact করুন</span>
-              </label>
+              <label class="checkbox-row"><input type="checkbox" name="callback" /><span>আমি চাই আপনারা আমাকে পরে contact করুন</span></label>
               <div class="form-actions">
                 <button class="btn btn-primary" type="submit">Send Message</button>
                 <a class="btn btn-secondary" id="phoneLink" href="tel:0969187260">Call Now</a>
@@ -156,91 +87,75 @@
             </form>
           </article>
           <aside class="aside-stack reveal delay-1">
-            <article class="card">
-              <h3>Direct contact</h3>
-              <div class="contact-list">
-                <p>📞 <span id="phoneSidebar">0969187260</span></p>
-                <p>💬 WhatsApp পরে add করা যাবে</p>
-                <p>🛡️ Respectful & safe communication</p>
-              </div>
-            </article>
-            <article class="card">
-              <h3>Our promise</h3>
-              <ul class="promise-list">
-                <li>আমরা আগে শুনবো, পরে বলবো।</li>
-                <li>Judgement ছাড়া কথা বলা হবে।</li>
-                <li>Critical case হলে real-world help নিতে encourage করা হবে।</li>
-              </ul>
-            </article>
+            <article class="card"><h3>Direct contact</h3><p>📞 <span id="phoneSidebar">0969187260</span></p></article>
+            <article class="card"><h3>Our promise</h3><p class="text-muted">আমরা আগে শুনবো, পরে বলবো। Judgement ছাড়া কথা বলা হবে।</p></article>
           </aside>
         </div>
       </section>
 
       <section class="calm-page section hidden" id="calmSection">
         <div class="container page-head">
-          <span class="eyebrow">CALM TOOLS</span>
-          <h2>একটু শান্ত হওয়ার জন্য simple tools।</h2>
+          <span class="eyebrow">CALM DOWN</span>
+          <h2>একটু শান্ত হওয়ার জন্য জাদুকরী কিছু উপায়।</h2>
         </div>
-        <div class="container grid-2">
-          <article class="card large reveal">
-            <h3>আজ কেমন লাগছে?</h3>
-            <div class="mood-grid" id="moodButtons"></div>
-            <div class="mood-suggestion" id="moodSuggestion"></div>
-          </article>
-          <article class="card large reveal delay-1 emergency-card">
-            <h3>জরুরি সহায়তা</h3>
-            <p id="emergencyText">যদি আপনি নিজেকে বা অন্য কাউকে ক্ষতি করার ঝুঁকিতে থাকেন, দয়া করে এখনই পরিবারের কাউকে, trusted person, নিকটস্থ হাসপাতাল বা স্থানীয় emergency service-এর সাথে যোগাযোগ করুন।</p>
-            <div class="form-actions">
-              <a class="btn btn-danger" href="tel:999">জরুরি কল</a>
-              <button class="btn btn-secondary" data-route="support">Trusted person কে জানাও</button>
-            </div>
-          </article>
-        </div>
+        
         <div class="container grid-2 lower-gap">
           <article class="card large reveal">
-            <h3>Breathing Circle</h3>
-            <div class="breathing-wrap">
-              <div class="breathing-circle" id="breathingCircle">Start</div>
-              <p>ধীরে শ্বাস নাও ৪ সেকেন্ড, ধীরে ছাড়ো ৪ সেকেন্ড।</p>
-              <div class="form-actions center">
-                <button class="btn btn-primary" id="startBreathing">Start</button>
-                <button class="btn btn-secondary" id="resetBreathing">Reset</button>
-              </div>
+            <h3>আজ কেমন লাগছে?</h3>
+            <div class="mood-grid top-gap" id="moodButtons"></div>
+            <div class="mood-suggestion" id="moodSuggestion"></div>
+          </article>
+
+          <article class="card large reveal delay-1 emergency-card">
+            <h3>জরুরি সহায়তা</h3>
+            <p id="emergencyText" class="top-gap"></p>
+            <div class="form-actions top-gap">
+              <a class="btn btn-danger" href="tel:999">জরুরি কল ৯৯৯</a>
             </div>
           </article>
+        </div>
+
+        <div class="container grid-2 lower-gap">
+          <article class="card large text-center reveal">
+            <h3>Breathing Circle</h3>
+            <p class="text-muted">বৃত্তের সাথে মিলিয়ে শ্বাস নাও এবং ছাড়ো।</p>
+            <div class="breathing-wrap top-gap">
+              <div class="breathing-circle" id="breathingCircle">Start</div>
+            </div>
+            <div class="form-actions center top-gap">
+              <button class="btn btn-primary" id="startBreathing">শুরু করো</button>
+              <button class="btn btn-secondary" id="resetBreathing">থামাও</button>
+            </div>
+          </article>
+
           <article class="card large reveal delay-1">
             <h3>Calm Focus Game</h3>
-            <div class="game-top">
-              <p id="gameMessage">শান্ত হয়ে শুধু আলাদা box টা খুঁজে ক্লিক করো।</p>
-              <span class="score-pill">Score: <strong id="gameScore">0</strong></span>
-            </div>
+            <div class="game-top top-gap"><p id="gameMessage">আলাদা রঙের বাক্সটা খুঁজে বের করো।</p><span class="score-pill">Score: <strong id="gameScore">0</strong></span></div>
             <div class="game-grid" id="gameGrid"></div>
           </article>
         </div>
+
         <div class="container grid-2 lower-gap">
           <article class="card large reveal">
-            <h3>Exercises</h3>
-            <div id="exerciseList" class="content-list"></div>
+            <h3>Exercises <span style="font-size: 0.8rem; font-weight: normal; color: var(--primary-strong);">[ক্লিক করে শুরু করো]</span></h3>
+            <div id="exerciseList" class="content-list top-gap"></div>
           </article>
           <article class="card large reveal delay-1">
-            <h3>Helpful Resources</h3>
-            <div id="resourceList" class="content-list bordered"></div>
+            <h3>Helpful Resources <span style="font-size: 0.8rem; font-weight: normal; color: var(--primary-strong);">[ক্লিক করে পড়ো]</span></h3>
+            <div id="resourceList" class="content-list top-gap"></div>
           </article>
         </div>
       </section>
 
       <section class="journal-page section hidden" id="journalSection">
         <div class="container page-head">
-          <span class="eyebrow">JOURNAL</span>
-          <h2>এখানে যা লিখবে তা browser-এ private ভাবে save থাকবে।</h2>
+          <span class="eyebrow">PRIVATE JOURNAL</span>
+          <h2>ভেতরের অন্ধকারগুলো এখানে নামিয়ে রাখো।</h2>
         </div>
-        <div class="container narrow">
+        <div class="container narrow lower-gap">
           <article class="card large reveal">
-            <h3>Private Journal</h3>
-            <textarea id="journalInput" rows="10" placeholder="আজ কেমন লাগছে? কী বলতে চাও? এখানে লিখে রাখো..."></textarea>
-            <div class="form-actions top-gap">
-              <button class="btn btn-primary" id="saveJournal">Save Journal</button>
-            </div>
+            <textarea id="journalInput" rows="12" placeholder="আজকের দিনটা কেমন কাটলো? লিখে রাখো..."></textarea>
+            <div class="form-actions top-gap"><button class="btn btn-primary" id="saveJournal">Save Journal</button></div>
             <p id="journalStatus" class="status-text"></p>
           </article>
         </div>
@@ -248,23 +163,26 @@
 
       <section class="quotes-area section active">
         <div class="container">
-          <div class="section-head reveal">
-            <span class="eyebrow">COMFORTING WORDS</span>
-            <h2>কিছু ছোট্ট কথা, যা হয়তো এই মুহূর্তে তোমাকে একটু শক্তি দেবে।</h2>
-          </div>
+          <div class="section-head reveal text-center"><span class="eyebrow">COMFORTING WORDS</span><h2>কিছু জাদুকরী কথা</h2></div>
           <div class="grid-3" id="quotesList"></div>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container footer-wrap">
-        <p>© <span id="yearNow"></span> <span id="footerSiteName">শুনছি তোমায়</span>. Built with care.</p>
-        <p>এটি emergency medical replacement নয়।</p>
+    <div id="interactiveModal" class="modal hidden">
+      <div class="modal-content card large text-center">
+        <h3 id="modalTitle">Title</h3>
+        <div class="modal-body top-gap-2">
+            <p id="modalText" class="poetic-text">Text will appear here step by step.</p>
+        </div>
+        <div class="form-actions center top-gap-2">
+            <button id="modalActionBtn" class="btn btn-primary">শুরু করি</button>
+            <button id="modalCloseBtn" class="btn btn-secondary">বন্ধ করো</button>
+        </div>
       </div>
-    </footer>
-  </div>
+    </div>
 
+  </div>
   <script type="module" src="app.js"></script>
 </body>
 </html>

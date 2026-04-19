@@ -3,11 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>শুনছি তোমায় — Admin</title>
-  <meta name="description" content="Admin panel for Shunchi Tomay" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Supreme Admin — শুনছি তোমায়</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="admin-body">
@@ -16,13 +13,10 @@
       <div class="container nav-wrap">
         <a class="brand" href="index.html">
           <img src="assets/logo.svg" alt="logo" class="brand-logo" />
-          <div>
-            <h1>শুনছি তোমায়</h1>
-            <p>Admin Panel</p>
-          </div>
+          <div><h1>শুনছি তোমায়</h1><p style="color: #ef4444; font-weight: bold;">Supreme Admin</p></div>
         </a>
         <div class="admin-top-actions">
-          <a href="index.html" class="btn btn-secondary small">User Site</a>
+          <a href="index.html" class="btn btn-primary small" style="color: white; border: 1px solid var(--border);" target="_blank">← User Site</a>
           <button id="logoutBtn" class="btn btn-danger small hidden">Logout</button>
         </div>
       </div>
@@ -31,137 +25,103 @@
     <main class="container admin-main">
       <section id="loginSection" class="admin-login-wrap">
         <article class="card admin-login-card reveal active">
-          <span class="eyebrow">ADMIN ACCESS</span>
-          <h2>Admin login ছাড়া dashboard খুলবে না</h2>
-          <p>Firebase Authentication ব্যবহার করে login করা হবে।</p>
+          <span class="eyebrow" style="color: #ef4444;">RESTRICTED ACCESS</span>
+          <h2>Supreme Admin Login</h2>
           <form id="adminLoginForm" class="stack-form top-gap">
-            <div>
-              <label for="adminEmail">Admin email</label>
-              <input id="adminEmail" type="email" required placeholder="admin@example.com" />
-            </div>
-            <div>
-              <label for="adminPassword">Password</label>
-              <input id="adminPassword" type="password" required placeholder="Password" />
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <div><label>Admin email</label><input id="adminEmail" type="email" required placeholder="admin@example.com" /></div>
+            <div><label>Password</label><input id="adminPassword" type="password" required placeholder="Password" /></div>
+            <button type="submit" class="btn btn-primary">Enter Dashboard</button>
             <p id="loginStatus" class="status-text"></p>
           </form>
         </article>
       </section>
 
       <section id="dashboardSection" class="hidden">
-        <div class="page-head compact-head">
-          <span class="eyebrow">DASHBOARD</span>
-          <h2>Content, messages এবং site data এখান থেকে manage করতে পারবে।</h2>
-        </div>
+        <div class="page-head compact-head"><span class="eyebrow">COMMAND CENTER</span><h2>প্ল্যাটফর্মের সম্পূর্ণ নিয়ন্ত্রণ তোমার হাতে।</h2></div>
 
-        <div class="admin-grid-stats">
+        <div class="admin-grid-stats top-gap">
           <article class="card stat-card"><h3>Total Messages</h3><p id="totalMessages">0</p></article>
+          <article class="card stat-card"><h3 style="color: #ef4444;">Critical (Depression/Anxiety)</h3><p id="criticalMessages" style="color: #ef4444;">0</p></article>
           <article class="card stat-card"><h3>Callback Requests</h3><p id="callbackMessages">0</p></article>
-          <article class="card stat-card"><h3>Latest Category</h3><p id="latestCategory">-</p></article>
         </div>
 
         <div class="admin-two-col top-gap-2">
-          <article class="card large">
-            <h3>Site Content Manager</h3>
-            <form id="contentForm" class="stack-form top-gap">
-              <div class="field-row two-col">
-                <div>
-                  <label for="siteNameInput">Site Name</label>
-                  <input id="siteNameInput" type="text" />
-                </div>
-                <div>
-                  <label for="phoneInput">Phone</label>
-                  <input id="phoneInput" type="text" />
-                </div>
-              </div>
+          <article class="card large" style="border-color: rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.05);">
+            <h3 style="color: #ef4444;">🚨 Global Emergency Override</h3>
+            <p class="text-muted">এটি চালু করলে সাইটের সবার স্ক্রিনে একটি লাল অ্যালার্ট ব্যানার শো করবে।</p>
+            <form id="emergencyToggleForm" class="stack-form top-gap">
+              <label class="checkbox-row" style="border-color: #ef4444;">
+                <input type="checkbox" id="globalEmergencyCheck" />
+                <span style="color: #ef4444; font-weight: bold;">Enable Site-Wide Emergency Banner</span>
+              </label>
               <div>
-                <label for="taglineInput">Tagline</label>
-                <input id="taglineInput" type="text" />
+                <label>Emergency Banner Text</label>
+                <input id="globalEmergencyTextInput" type="text" placeholder="e.g. আমরা বর্তমানে অনেক মেসেজ পাচ্ছি..." />
               </div>
-              <div class="field-row two-col">
-                <div>
-                  <label for="heroPrimaryInput">Hero Button 1</label>
-                  <input id="heroPrimaryInput" type="text" />
-                </div>
-                <div>
-                  <label for="heroSecondaryInput">Hero Button 2</label>
-                  <input id="heroSecondaryInput" type="text" />
-                </div>
-              </div>
-              <div>
-                <label for="heroImageInput">Hero Image URL</label>
-                <input id="heroImageInput" type="text" />
-              </div>
-              <div>
-                <label for="aboutInput">About Text</label>
-                <textarea id="aboutInput" rows="5"></textarea>
-              </div>
-              <div>
-                <label for="emergencyInput">Emergency Text</label>
-                <textarea id="emergencyInput" rows="4"></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Save Site Content</button>
-              <p id="contentStatus" class="status-text"></p>
+              <button type="submit" class="btn btn-danger small">Update Emergency State</button>
+              <p id="emergencyStatus" class="status-text"></p>
             </form>
           </article>
 
           <article class="card large">
-            <h3>Quick Add Content</h3>
+            <h3>⚙️ Dynamic Tool Controller</h3>
+            <p class="text-muted">সাইটের লজিক এবং টুলসগুলোর সেটিং পরিবর্তন করো।</p>
+            <form id="toolControllerForm" class="stack-form top-gap">
+              <div>
+                <label>Breathing Tool Duration (Seconds)</label>
+                <input id="breathingTimeInput" type="number" min="2" max="10" placeholder="e.g. 4" />
+                <small class="text-muted">ডিফল্ট: ৪ সেকেন্ড। পরিবর্তন করলে ইউজারের সাইটে রিয়েল-টাইমে আপডেট হবে।</small>
+              </div>
+              <button type="submit" class="btn btn-primary small">Update Tools</button>
+              <p id="toolStatus" class="status-text"></p>
+            </form>
+          </article>
+        </div>
+
+        <div class="top-gap-2">
+          <article class="card large">
+            <div class="list-head"><h3>📨 Live Triage System (Messages)</h3></div>
+            <div id="adminMessagesList" class="admin-list grid-2"></div>
+          </article>
+        </div>
+        
+        <div class="admin-two-col top-gap-2">
+          <article class="card large">
+            <h3>Site Content Manager</h3>
+            <form id="contentForm" class="stack-form top-gap">
+              <div class="field-row two-col"><div><label>Site Name</label><input id="siteNameInput" type="text" /></div><div><label>Phone</label><input id="phoneInput" type="text" /></div></div>
+              <div><label>Tagline</label><input id="taglineInput" type="text" /></div>
+              <div class="field-row two-col"><div><label>Button 1</label><input id="heroPrimaryInput" type="text" /></div><div><label>Button 2</label><input id="heroSecondaryInput" type="text" /></div></div>
+              <div><label>Emergency Text</label><textarea id="emergencyInput" rows="3"></textarea></div>
+              <button type="submit" class="btn btn-primary small">Save Content</button>
+            </form>
+          </article>
+          
+          <article class="card large">
+            <h3>Quick Add Data</h3>
             <div class="top-gap stack-form">
-              <div>
-                <label for="quoteInput">New Quote</label>
-                <textarea id="quoteInput" rows="3" placeholder="নতুন quote লিখো..."></textarea>
-                <button class="btn btn-secondary small top-gap" id="addQuoteBtn" type="button">Add Quote</button>
-              </div>
-              <div>
-                <label for="exerciseTitle">New Exercise Title</label>
-                <input id="exerciseTitle" type="text" placeholder="Exercise title" />
-              </div>
-              <div>
-                <label for="exerciseText">New Exercise Text</label>
-                <textarea id="exerciseText" rows="3" placeholder="Exercise details"></textarea>
-                <button class="btn btn-secondary small top-gap" id="addExerciseBtn" type="button">Add Exercise</button>
-              </div>
-              <div>
-                <label for="resourceTitle">New Resource Title</label>
-                <input id="resourceTitle" type="text" placeholder="Resource title" />
-              </div>
-              <div>
-                <label for="resourceText">New Resource Text</label>
-                <textarea id="resourceText" rows="3" placeholder="Resource details"></textarea>
-                <button class="btn btn-secondary small top-gap" id="addResourceBtn" type="button">Add Resource</button>
-              </div>
+              <div><label>New Quote</label><textarea id="quoteInput" rows="2"></textarea><button type="button" class="btn btn-secondary small top-gap" id="addQuoteBtn">Add Quote</button></div>
+              
+              <div class="top-gap"><label>New Exercise Title</label><input id="exerciseTitle" type="text" /><label class="top-gap">Text</label><textarea id="exerciseText" rows="2"></textarea><button type="button" class="btn btn-secondary small top-gap" id="addExerciseBtn">Add Exercise</button></div>
+              
+              <div class="top-gap"><label>New Resource Title</label><input id="resourceTitle" type="text" /><label class="top-gap">Text</label><textarea id="resourceText" rows="2"></textarea><button type="button" class="btn btn-secondary small top-gap" id="addResourceBtn">Add Resource</button></div>
+              
               <p id="quickStatus" class="status-text"></p>
             </div>
           </article>
         </div>
 
         <div class="admin-two-col top-gap-2">
-          <article class="card large">
-            <div class="list-head"><h3>Quotes</h3></div>
-            <div id="adminQuotesList" class="admin-list"></div>
-          </article>
-          <article class="card large">
-            <div class="list-head"><h3>Exercises</h3></div>
-            <div id="adminExercisesList" class="admin-list"></div>
-          </article>
+          <article class="card large"><div class="list-head"><h3>Quotes</h3></div><div id="adminQuotesList" class="admin-list"></div></article>
+          <article class="card large"><div class="list-head"><h3>Exercises</h3></div><div id="adminExercisesList" class="admin-list"></div></article>
         </div>
-
-        <div class="admin-two-col top-gap-2">
-          <article class="card large">
-            <div class="list-head"><h3>Resources</h3></div>
-            <div id="adminResourcesList" class="admin-list"></div>
-          </article>
-          <article class="card large">
-            <div class="list-head"><h3>Submitted Messages</h3></div>
-            <div id="adminMessagesList" class="admin-list"></div>
-          </article>
+        
+        <div class="top-gap-2">
+          <article class="card large"><div class="list-head"><h3>Helpful Resources</h3></div><div id="adminResourcesList" class="admin-list"></div></article>
         </div>
       </section>
     </main>
   </div>
-
   <script type="module" src="admin.js"></script>
 </body>
 </html>
