@@ -1,5 +1,5 @@
 import {
-  db, collection, addDoc, doc, onSnapshot, serverTimestamp, ensureSeedContent, defaultContent
+  db, collection, addDoc, doc, onSnapshot, ensureSeedContent, defaultContent
 } from './firebase/config.js';
 
 const routes = ['home', 'support', 'calm', 'journal'];
@@ -15,9 +15,9 @@ const menuToggle = document.getElementById('menuToggle');
 
 // Mood Map with Direct Actions
 const moodMap = {
-  terrible: { label: 'খুব খারাপ', suggestion: 'এখনই breathing tool ব্যবহার করো।', actionText: 'Breathing শুরু করো', action: () => document.getElementById('breathingCircle').scrollIntoView({behavior: 'smooth'}) },
-  bad: { label: 'খারাপ', suggestion: 'নিচের Exercise লিস্ট থেকে grounding exercise করো।', actionText: 'Exercise দেখো', action: () => document.getElementById('exerciseList').scrollIntoView({behavior: 'smooth'}) },
-  okay: { label: 'মোটামুটি', suggestion: 'একটা mind game দিয়ে মনকে শান্ত করতে পারো।', actionText: 'গেম খেলো', action: () => document.getElementById('gameGrid').scrollIntoView({behavior: 'smooth'}) },
+  terrible: { label: 'খুব খারাপ', suggestion: 'এখনই breathing tool ব্যবহার করো।', actionText: 'Breathing শুরু করো', action: () => { const el = document.getElementById('breathingCircle'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
+  bad: { label: 'খারাপ', suggestion: 'নিচের Exercise লিস্ট থেকে grounding exercise করো।', actionText: 'Exercise দেখো', action: () => { const el = document.getElementById('exerciseList'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
+  okay: { label: 'মোটামুটি', suggestion: 'একটা mind game দিয়ে মনকে শান্ত করতে পারো।', actionText: 'গেম খেলো', action: () => { const el = document.getElementById('gameGrid'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
   good: { label: 'ভালো', suggestion: 'আজকের জন্য Private Journal-এ ভালো লাগাগুলো লিখে রাখো।', actionText: 'Journal-এ লিখো', action: () => showRoute('journal') },
 };
 
@@ -51,10 +51,10 @@ function openInteractiveModal(item) {
   const mText = document.getElementById('modalText');
   const mAction = document.getElementById('modalActionBtn');
   const mClose = document.getElementById('modalCloseBtn');
+  if(!modal) return;
 
   mTitle.textContent = item.title;
   
-  // Split text by Bengali full stop "।" to create steps
   let steps = item.text.split('।').filter(s => s.trim().length > 0);
   let stepIdx = 0;
   
@@ -92,7 +92,6 @@ function openInteractiveModal(item) {
 function applyContent(content) {
   currentContent = { ...defaultContent, ...content };
   
-  // Global Emergency Override
   const eBanner = document.getElementById('globalEmergencyBanner');
   const eText = document.getElementById('globalEmergencyText');
   if(eBanner && eText) {
@@ -161,6 +160,7 @@ async function initContent() {
   });
 }
 
+// --- SUPPORT FORM WITH TIMEOUT LOGIC ---
 function initSupportForm() {
   const form = document.getElementById('supportForm');
   const status = document.getElementById('formStatus');
@@ -182,10 +182,18 @@ function initSupportForm() {
         message: formData.get('message') ? formData.get('message').toString().trim() : '',
         callback: formData.get('callback') === 'on',
         status: 'new',
-        createdAt: new Date() // Fix: Date instead of serverTimestamp to prevent crash without auth
+        createdAt: new Date()
       };
 
-      await addDoc(collection(db, 'messages'), payload);
+      // 8-second Timeout Logic to prevent infinite hanging
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timed out. Check your internet or Firebase Rules.")), 8000)
+      );
+
+      await Promise.race([
+        addDoc(collection(db, 'messages'), payload),
+        timeoutPromise
+      ]);
       
       form.reset();
       status.textContent = 'তোমার message নেওয়া হয়েছে। আমরা সাথে আছি।';
@@ -193,7 +201,7 @@ function initSupportForm() {
       
     } catch (err) {
       console.error("Firebase Error: ", err);
-      status.textContent = `Message পাঠানো যায়নি। কারণ: ${err.message}`;
+      status.textContent = `Message পাঠানো যায়নি। (কারণ: ${err.message})`;
       status.classList.add('error');
       status.style.color = '#ef4444';
     }
@@ -291,7 +299,8 @@ function initJournal() {
     jInput.value = localStorage.getItem('shunchi_journal') || '';
     jBtn.addEventListener('click', () => {
       localStorage.setItem('shunchi_journal', jInput.value);
-      document.getElementById('journalStatus').textContent = 'Saved privately in your browser.';
+      const statusText = document.getElementById('journalStatus');
+      if(statusText) statusText.textContent = 'Saved privately in your browser.';
     });
   }
 }
