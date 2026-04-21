@@ -90,7 +90,7 @@ input:focus, textarea:focus { border-color: var(--primary); }
 .status-text { color: var(--success); font-weight: 600; min-height: 1.2em; }
 .status-text.error { color: var(--danger); }
 
-/* --- CONTENT LISTS & TEXT FIXES --- */
+/* CONTENT LISTS */
 .content-list { display: grid; gap: 14px; }
 .content-item { padding: 18px; border-radius: 16px; background: var(--secondary); border: 1px solid var(--border); }
 .content-item h4 { color: #fff !important; margin: 0 0 8px; font-size: 1.15rem; }
@@ -109,9 +109,6 @@ input:focus, textarea:focus { border-color: var(--primary); }
 .mood-suggestion { margin-top: 16px; padding: 18px; border-radius: 16px; background: var(--secondary); color: #cbd5e1; border: 1px solid var(--border); line-height: 1.6; }
 
 /* Breathing & Game */
-.sos-floating-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--danger); color: white; border-radius: 50%; display: grid; place-items: center; font-weight: bold; box-shadow: 0 10px 25px rgba(239,68,68,0.4); z-index: 100; animation: pulse 2s infinite; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 70% { box-shadow: 0 0 0 15px rgba(239,68,68,0); } }
-
 .breathing-wrap { text-align: center; }
 .breathing-circle { width: 190px; height: 190px; border-radius: 999px; display: grid; place-items: center; margin: 10px auto 18px; background: radial-gradient(circle at 30% 30%, #1e293b, #0f172a); color: #fff; font-size: 1.3rem; font-weight: 700; border: 2px solid var(--primary); box-shadow: 0 0 40px rgba(59,130,246,0.1); transition: transform 1s ease; }
 .breathing-circle.inhale { transform: scale(1.2); box-shadow: 0 0 60px rgba(59,130,246,0.4); background: var(--primary); border-color: #fff; }
@@ -126,7 +123,7 @@ input:focus, textarea:focus { border-color: var(--primary); }
 .reveal.delay-1 { animation-delay: 0.1s; }
 @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 
-/* --- INTERACTIVE FEATURES CSS --- */
+/* INTERACTIVE FEATURES CSS */
 .interactive-item { cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; border: 1px solid var(--border); }
 .interactive-item:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(59,130,246,0.15); border-color: var(--primary); background: var(--surface-solid); }
 .interactive-item .hint-text { color: var(--primary-strong); font-size: 0.85rem; font-weight: 600; margin: 0; }
@@ -146,3 +143,32 @@ input:focus, textarea:focus { border-color: var(--primary); }
   .menu-toggle { display: block; }
   .grid-2, .grid-3, .split-layout, .hero-grid, .field-row.two-col { grid-template-columns: 1fr; }
 }
+@keyframes pulse {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.global-emergency-banner { background: #ef4444; color: white; padding: 14px 0; text-align: center; font-weight: 600; position: sticky; top: 0; z-index: 9999; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4); }
+.global-emergency-banner.hidden { display: none; }
+
+/* --- NEW FEATURES CSS --- */
+/* SOS Button */
+.sos-floating-btn { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; background: #ef4444; color: white; border-radius: 50%; display: grid; place-items: center; font-weight: bold; font-size: 1.2rem; box-shadow: 0 10px 25px rgba(239,68,68,0.4); z-index: 9999; animation: sosPulse 2s infinite; cursor: pointer; border: 3px solid #b91c1c; }
+@keyframes sosPulse { 0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); } 70% { box-shadow: 0 0 0 20px rgba(239,68,68,0); } 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); } }
+
+/* Flip Card */
+.flip-card { background-color: transparent; height: 260px; perspective: 1000px; cursor: pointer; }
+.flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s; transform-style: preserve-3d; }
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-front, .flip-card-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; border-radius: 24px; padding: 20px; }
+.flip-card-back { transform: rotateY(180deg); }
+.text-sm { font-size: 0.85rem; }
+
+/* Thought Burner Animation */
+@keyframes burnEffect {
+  0% { filter: blur(0px) brightness(1); transform: translateY(0) scale(1); opacity: 1; }
+  40% { filter: blur(3px) sepia(1) hue-rotate(-50deg) saturate(5) brightness(1.2); transform: translateY(-5px) scale(1.02); color: #f97316; opacity: 0.8; }
+  100% { filter: blur(8px) grayscale(1) brightness(0.2); transform: translateY(-20px) scale(0.9); opacity: 0; }
+}
+.burning { animation: burnEffect 1.5s forwards; pointer-events: none; }

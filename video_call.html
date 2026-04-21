@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Session - শুনছি তোমায়</title>
+    <style>
+        /* Dark Theme for Video Call Room */
+        body { margin: 0; padding: 0; background-color: #020617; width: 100vw; height: 100vh; display: flex; flex-direction: column; }
+        #root { width: 100%; height: 100vh; }
+        .back-btn { position: absolute; top: 15px; left: 15px; z-index: 100; background: rgba(239, 68, 68, 0.8); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: sans-serif; font-weight: bold; backdrop-filter: blur(5px); }
+        .back-btn:hover { background: #ef4444; }
+    </style>
+</head>
+<body>
+
+    <button class="back-btn" onclick="window.close()">🚪 সেশন শেষ করুন</button>
+
+    <div id="root"></div>
+
+    <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
+    
+    <script>
+        // URL থেকে Room ID এবং Name বের করার লজিক
+        function getUrlParams(url) {
+            let urlStr = url.split('?')[1];
+            const urlSearchParams = new URLSearchParams(urlStr);
+            const result = Object.fromEntries(urlSearchParams.entries());
+            return result;
+        }
+
+        window.onload = function () {
+            const roomID = getUrlParams(window.location.href)['roomID'] || (Math.floor(Math.random() * 10000) + "");
+            const userID = Math.floor(Math.random() * 10000) + "";
+            const userName = getUrlParams(window.location.href)['name'] || "Anonymous_" + userID;
+
+            // ZegoCloud Credentials (পরবর্তীতে এখানে তোমার আসল আইডি বসাতে হবে)
+            const appID = 123456789; // TODO: Replace with your ZegoCloud AppID
+            const serverSecret = "YOUR_SERVER_SECRET"; // TODO: Replace with your ZegoCloud ServerSecret
+            
+            // টোকেন জেনারেট এবং রুম তৈরি
+            const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, userName);
+            const zp = ZegoUIKitPrebuilt.create(kitToken);
+
+            zp.joinRoom({
+                container: document.querySelector('#root'),
+                scenario: {
+                    mode: ZegoUIKitPrebuilt.OneONoneCall, // 1-on-1 Call Mode
+                },
+                showPreJoinView: false, // সরাসরি কলে ঢুকে যাবে
+                turnOnMicrophoneWhenJoining: true,
+                turnOnCameraWhenJoining: false, // ডিফল্টভাবে ক্যামেরা অফ থাকবে
+                showRoomDetailsButton: false
+            });
+        }
+    </script>
+</body>
+</html>

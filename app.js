@@ -1,6 +1,4 @@
-import {
-  db, collection, addDoc, doc, onSnapshot, ensureSeedContent, defaultContent
-} from './firebase/config.js';
+import { db, collection, addDoc, doc, onSnapshot, ensureSeedContent, defaultContent } from './firebase/config.js';
 
 const routes = ['home', 'support', 'calm', 'journal'];
 const sections = {
@@ -13,17 +11,14 @@ const sections = {
 const mainNav = document.getElementById('mainNav');
 const menuToggle = document.getElementById('menuToggle');
 
-// Mood Map with Direct Actions
 const moodMap = {
   terrible: { label: 'খুব খারাপ', suggestion: 'এখনই breathing tool ব্যবহার করো।', actionText: 'Breathing শুরু করো', action: () => { const el = document.getElementById('breathingCircle'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
   bad: { label: 'খারাপ', suggestion: 'নিচের Exercise লিস্ট থেকে grounding exercise করো।', actionText: 'Exercise দেখো', action: () => { const el = document.getElementById('exerciseList'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
-  okay: { label: 'মোটামুটি', suggestion: 'একটা mind game দিয়ে মনকে শান্ত করতে পারো।', actionText: 'গেম খেলো', action: () => { const el = document.getElementById('gameGrid'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
+  okay: { label: 'মোটামুটি', suggestion: 'একটা mind game দিয়ে মনকে শান্ত করতে পারো।', actionText: 'গেম খেলো', action: () => { const el = document.getElementById('homeSection'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
   good: { label: 'ভালো', suggestion: 'আজকের জন্য Private Journal-এ ভালো লাগাগুলো লিখে রাখো।', actionText: 'Journal-এ লিখো', action: () => showRoute('journal') },
 };
 
 let currentContent = { ...defaultContent };
-let targetIndex = Math.floor(Math.random() * 9);
-let gameScore = 0;
 let breathingTimer = null;
 let breathingStep = 0;
 
@@ -44,7 +39,6 @@ function wireRoutes() {
   });
 }
 
-// --- INTERACTIVE MODAL LOGIC (The Magic) ---
 function openInteractiveModal(item) {
   const modal = document.getElementById('interactiveModal');
   const mTitle = document.getElementById('modalTitle');
@@ -54,16 +48,12 @@ function openInteractiveModal(item) {
   if(!modal) return;
 
   mTitle.textContent = item.title;
-  
   let steps = item.text.split('।').filter(s => s.trim().length > 0);
   let stepIdx = 0;
   
   const updateTextWithFade = (text) => {
       mText.style.opacity = 0;
-      setTimeout(() => {
-          mText.textContent = text + '।';
-          mText.style.opacity = 1;
-      }, 300);
+      setTimeout(() => { mText.textContent = text + '।'; mText.style.opacity = 1; }, 300);
   };
 
   if(steps.length > 1) {
@@ -74,53 +64,31 @@ function openInteractiveModal(item) {
           if(stepIdx < steps.length) {
               updateTextWithFade(steps[stepIdx]);
               if(stepIdx === steps.length - 1) mAction.textContent = "শেষ করো";
-          } else {
-              modal.classList.add('hidden');
-          }
+          } else { modal.classList.add('hidden'); }
       };
   } else {
       updateTextWithFade(steps[0] || item.text);
       mAction.textContent = "বুঝতে পেরেছি";
       mAction.onclick = () => modal.classList.add('hidden');
   }
-  
   mClose.onclick = () => modal.classList.add('hidden');
   modal.classList.remove('hidden');
 }
 
-// --- FIREBASE CONTENT SYNC ---
 function applyContent(content) {
   currentContent = { ...defaultContent, ...content };
-  
-  const eBanner = document.getElementById('globalEmergencyBanner');
-  const eText = document.getElementById('globalEmergencyText');
-  if(eBanner && eText) {
-      if(currentContent.globalEmergency) {
-          eBanner.classList.remove('hidden');
-          eText.textContent = currentContent.globalEmergencyText || 'জরুরি অবস্থা: অনুগ্রহ করে ৯৯৯ এ কল করুন।';
-      } else {
-          eBanner.classList.add('hidden');
-      }
-  }
-
   window.breathingDuration = (currentContent.breathingTime || 4) * 1000;
 
   const setIfFound = (id, text) => { const el = document.getElementById(id); if(el) el.textContent = text; };
-
   setIfFound('siteName', currentContent.siteName);
   setIfFound('siteTagline', currentContent.tagline);
   setIfFound('aboutText', currentContent.about);
   setIfFound('heroPrimaryButton', currentContent.heroPrimaryButton);
   setIfFound('heroSecondaryButton', currentContent.heroSecondaryButton);
   setIfFound('phoneDisplay', currentContent.phone);
-  setIfFound('phoneSidebar', currentContent.phone);
-  setIfFound('emergencyText', currentContent.emergencyText);
   
   const phoneLink = document.getElementById('phoneLink');
   if(phoneLink) phoneLink.href = `tel:${currentContent.phone}`;
-
-  const img = document.getElementById('heroImage');
-  if(img) img.src = currentContent.heroImage || 'assets/hero-illustration.svg';
 
   renderQuotes(currentContent.quotes || []);
   renderInteractiveList('exerciseList', currentContent.exercises || [], '👉 ক্লিক করে শুরু করো');
@@ -160,19 +128,13 @@ async function initContent() {
   });
 }
 
-// --- SUPPORT FORM WITH TIMEOUT LOGIC ---
 function initSupportForm() {
   const form = document.getElementById('supportForm');
   const status = document.getElementById('formStatus');
   if(!form) return;
-  
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    status.textContent = 'Sending...';
-    status.classList.remove('error');
-    status.style.color = '#94a3b8';
-    
+    status.textContent = 'Sending...'; status.classList.remove('error'); status.style.color = '#94a3b8';
     try {
       const formData = new FormData(form);
       const payload = {
@@ -181,29 +143,15 @@ function initSupportForm() {
         category: formData.get('category') ? formData.get('category').toString().trim() : 'Other',
         message: formData.get('message') ? formData.get('message').toString().trim() : '',
         callback: formData.get('callback') === 'on',
-        status: 'new',
-        createdAt: new Date()
+        status: 'new', createdAt: new Date()
       };
-
-      // 8-second Timeout Logic to prevent infinite hanging
-      const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Request timed out. Check your internet or Firebase Rules.")), 8000)
-      );
-
-      await Promise.race([
-        addDoc(collection(db, 'messages'), payload),
-        timeoutPromise
-      ]);
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Request timed out.")), 8000));
+      await Promise.race([ addDoc(collection(db, 'messages'), payload), timeoutPromise ]);
       
       form.reset();
-      status.textContent = 'তোমার message নেওয়া হয়েছে। আমরা সাথে আছি।';
-      status.style.color = '#10b981';
-      
+      status.textContent = 'তোমার message নেওয়া হয়েছে। আমরা সাথে আছি।'; status.style.color = '#10b981';
     } catch (err) {
-      console.error("Firebase Error: ", err);
-      status.textContent = `Message পাঠানো যায়নি। (কারণ: ${err.message})`;
-      status.classList.add('error');
-      status.style.color = '#ef4444';
+      status.textContent = `Message পাঠানো যায়নি। (কারণ: ${err.message})`; status.classList.add('error'); status.style.color = '#ef4444';
     }
   });
 }
@@ -239,19 +187,14 @@ function initBreathingTool() {
     circle.textContent = inhale ? 'Inhale' : 'Exhale';
     circle.classList.toggle('inhale', inhale);
     circle.classList.toggle('exhale', !inhale);
-    
     const durationSec = (window.breathingDuration || 4000) / 1000;
     circle.style.transition = `transform ${durationSec}s ease, box-shadow ${durationSec}s ease, background ${durationSec}s ease`;
-    
     breathingStep = (breathingStep + 1) % 8;
   };
 
   startBtn.addEventListener('click', () => {
     if (breathingTimer) {
-      clearInterval(breathingTimer);
-      breathingTimer = null;
-      startBtn.textContent = 'শুরু করো';
-      return;
+      clearInterval(breathingTimer); breathingTimer = null; startBtn.textContent = 'শুরু করো'; return;
     }
     update();
     breathingTimer = setInterval(update, window.breathingDuration || 4000);
@@ -260,36 +203,10 @@ function initBreathingTool() {
 
   if(resetBtn) {
     resetBtn.addEventListener('click', () => {
-      clearInterval(breathingTimer);
-      breathingTimer = null;
-      breathingStep = 0;
-      circle.textContent = 'Start';
-      circle.classList.remove('inhale', 'exhale');
-      startBtn.textContent = 'শুরু করো';
+      clearInterval(breathingTimer); breathingTimer = null; breathingStep = 0;
+      circle.textContent = 'Start'; circle.classList.remove('inhale', 'exhale'); startBtn.textContent = 'শুরু করো';
     });
   }
-}
-
-function initGame() {
-  const gameGrid = document.getElementById('gameGrid');
-  const gameScoreEl = document.getElementById('gameScore');
-  const gameMessage = document.getElementById('gameMessage');
-  if(!gameGrid) return;
-  const render = () => {
-    gameGrid.innerHTML = '';
-    for (let i = 0; i < 9; i++) {
-      const cell = document.createElement('button');
-      cell.className = `game-cell ${i === targetIndex ? 'target' : ''}`;
-      cell.addEventListener('click', () => {
-        if (i === targetIndex) {
-          gameScore++; gameMessage.textContent = 'দারুণ। আবার করো। ধীরে...';
-          targetIndex = Math.floor(Math.random() * 9); gameScoreEl.textContent = gameScore; render();
-        } else { gameMessage.textContent = 'No problem. আবার চেষ্টা করো।'; }
-      });
-      gameGrid.appendChild(cell);
-    }
-  };
-  render();
 }
 
 function initJournal() {
@@ -305,6 +222,62 @@ function initJournal() {
   }
 }
 
+// --- NEW FEATURES & LIVE CALL LOGIC ---
+function initNewFeatures() {
+  // SOS Logic
+  const sosBtn = document.getElementById('sosButton');
+  const sosOverlay = document.getElementById('sosOverlay');
+  const closeSos = document.getElementById('closeSos');
+  if(sosBtn && sosOverlay && closeSos) {
+    sosBtn.addEventListener('click', (e) => { e.preventDefault(); sosOverlay.classList.remove('hidden'); });
+    closeSos.addEventListener('click', () => sosOverlay.classList.add('hidden'));
+  }
+
+  // Thought Burner Logic
+  const burnBtn = document.getElementById('burnBtn');
+  const burnText = document.getElementById('burnText');
+  if(burnBtn && burnText) {
+    burnBtn.addEventListener('click', () => {
+      if(!burnText.value.trim()) return;
+      burnText.classList.add('burning');
+      burnBtn.disabled = true; burnBtn.textContent = '🔥 পুড়ছে...';
+      setTimeout(() => {
+        burnText.value = ''; burnText.classList.remove('burning');
+        burnBtn.disabled = false; burnBtn.textContent = '🔥 পুড়িয়ে ফেলো';
+      }, 1500);
+    });
+  }
+
+  // Flip Card
+  document.querySelectorAll('.flip-card').forEach(card => {
+    card.addEventListener('click', () => card.classList.toggle('flipped'));
+  });
+}
+
+function initLiveCall() {
+  const liveCallBtn = document.getElementById('liveCallBtn');
+  const callStatusText = document.getElementById('callStatusText');
+  if(!liveCallBtn) return;
+
+  liveCallBtn.addEventListener('click', async () => {
+    liveCallBtn.classList.add('hidden'); callStatusText.classList.remove('hidden');
+    callStatusText.textContent = 'কলিং (রিং হচ্ছে)... 🔔'; callStatusText.style.color = '#3b82f6';
+    try {
+      const callRef = await addDoc(collection(db, 'live_calls'), { user: 'User_' + Math.floor(Math.random() * 1000), status: 'ringing', createdAt: new Date() });
+      onSnapshot(doc(db, 'live_calls', callRef.id), (snap) => {
+        const data = snap.data();
+        if(data && data.status === 'accepted') {
+          callStatusText.textContent = '✅ মেন্টর কল রিসিভ করেছেন! (Video Loading...)'; callStatusText.style.color = '#10b981';
+          setTimeout(() => { window.location.href = `video_call.html?roomID=${callRef.id}&name=User`; }, 1500);
+        } else if(data && data.status === 'rejected') {
+          callStatusText.textContent = '❌ মেন্টর ব্যস্ত আছেন। একটু পর আবার চেষ্টা করুন।'; callStatusText.style.color = '#ef4444';
+          setTimeout(() => { liveCallBtn.classList.remove('hidden'); callStatusText.classList.add('hidden'); }, 5000);
+        }
+      });
+    } catch(err) { callStatusText.textContent = 'নেটওয়ার্ক এরর!'; callStatusText.style.color = '#ef4444'; }
+  });
+}
+
 // --- INITIALIZATION ---
 wireRoutes();
 if(menuToggle) menuToggle.addEventListener('click', () => mainNav.classList.toggle('open'));
@@ -312,6 +285,7 @@ initContent();
 initSupportForm();
 initMoodButtons();
 initBreathingTool();
-initGame();
 initJournal();
+initNewFeatures();
+initLiveCall();
 showRoute('home');

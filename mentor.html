@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentor Portal - শুনছি তোমায়</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Premium Dark Theme & Glassmorphism */
+    body { margin: 0; padding: 0; background: #020617; color: #f8fafc; font-family: 'Hind Siliguri', sans-serif; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+    .glass-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 16px; padding: 30px; }
+    .hidden { display: none !important; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px dashed rgba(255, 255, 255, 0.1); padding-bottom: 15px; }
+    
+    /* Inputs & Buttons */
+    input, textarea { width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 12px; border-radius: 8px; margin-bottom: 15px; outline: none; box-sizing: border-box; }
+    input:focus, textarea:focus { border-color: #3b82f6; }
+    .btn { background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+    .btn:hover { background: #2563eb; transform: translateY(-2px); }
+    .btn-danger { background: #ef4444; }
+    .btn-danger:hover { background: #dc2626; }
+    .btn-success { background: #10b981; }
+    .btn-success:hover { background: #059669; }
+    
+    /* Grid System */
+    .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .ring-box { text-align: center; padding: 40px 20px; border: 1px dashed #3b82f6; border-radius: 12px; background: rgba(59, 130, 246, 0.05); transition: all 0.3s ease; }
+    
+    @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.8; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
+    @media (max-width: 768px) { .dashboard-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="loginSection" class="glass-card" style="max-width: 400px; margin: 100px auto; text-align: center;">
+      <h2 style="margin-bottom: 5px;">🧑‍🏫 Mentor Portal</h2>
+      <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 25px;">লগ-ইন করে সেশনে যুক্ত হোন</p>
+      
+      <form id="mentorLoginForm">
+        <input type="email" id="mentorEmail" placeholder="📧 মেন্টর ইমেইল" required>
+        <input type="password" id="mentorPassword" placeholder="🔑 পাসওয়ার্ড" required>
+        <button type="submit" class="btn" style="width: 100%;">লগ-ইন করুন</button>
+        <p id="loginError" style="color: #ef4444; font-size: 0.9rem; margin-top: 10px; font-weight: bold;"></p>
+      </form>
+    </div>
+
+    <div id="dashboardSection" class="hidden">
+      <div class="top-bar">
+        <div>
+          <h2 style="margin: 0;">🧑‍🏫 মেন্টর ড্যাশবোর্ড</h2>
+          <p style="margin: 0; color: #10b981; font-size: 0.9rem;">🟢 Online & Active</p>
+        </div>
+        <button id="logoutBtn" class="btn btn-danger">🚪 লগ-আউট</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="glass-card">
+          <h3 style="margin-top: 0;">📞 Live Call Requests</h3>
+          <p style="color: #94a3b8; font-size: 0.9rem;">কেউ কল করলে এখানে রিং বাজবে...</p>
+          
+          <div id="incomingCallBox" class="ring-box">
+             <div style="font-size: 3rem; margin-bottom: 10px;">🎧</div>
+             <p style="color: #94a3b8;">অপেক্ষা করা হচ্ছে...</p>
+          </div>
+        </div>
+
+        <div class="glass-card">
+          <h3 style="margin-top: 0;">📝 পরামর্শ ও প্রেসক্রিপশন</h3>
+          <p style="color: #94a3b8; font-size: 0.9rem;">সেশন শেষে ইউজারের জন্য গাইডলাইন লিখুন</p>
+          
+          <input type="text" id="adviceUserId" placeholder="👤 ইউজার আইডি বা নাম" disabled>
+          <textarea id="adviceText" rows="5" placeholder="✍️ আপনার পরামর্শ এখানে লিখুন..."></textarea>
+          <button class="btn" style="width: 100%;">💾 পরামর্শ সেভ করুন</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="mentor.js"></script>
+</body>
+</html>
