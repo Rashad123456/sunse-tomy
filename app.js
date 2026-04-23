@@ -14,7 +14,7 @@ const menuToggle = document.getElementById('menuToggle');
 const moodMap = {
   terrible: { label: 'খুব খারাপ', suggestion: 'এখনই breathing tool ব্যবহার করো।', actionText: 'Breathing শুরু করো', action: () => { const el = document.getElementById('breathingCircle'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
   bad: { label: 'খারাপ', suggestion: 'নিচের Exercise লিস্ট থেকে grounding exercise করো।', actionText: 'Exercise দেখো', action: () => { const el = document.getElementById('exerciseList'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
-  okay: { label: 'মোটামুটি', suggestion: 'একটা mind game দিয়ে মনকে শান্ত করতে পারো।', actionText: 'গেম খেলো', action: () => { const el = document.getElementById('homeSection'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
+  okay: { label: 'মোটামুটি', suggestion: 'একটা mind game দিয়ে মনকে শান্ত করতে পারো।', actionText: 'গেম খেলো', action: () => { const el = document.getElementById('homeSection'); if(el) el.scrollIntoView({behavior: 'smooth'}); } },
   good: { label: 'ভালো', suggestion: 'আজকের জন্য Private Journal-এ ভালো লাগাগুলো লিখে রাখো।', actionText: 'Journal-এ লিখো', action: () => showRoute('journal') },
 };
 
@@ -92,7 +92,7 @@ function applyContent(content) {
 
   renderQuotes(currentContent.quotes || []);
   renderInteractiveList('exerciseList', currentContent.exercises || [], '👉 ক্লিক করে শুরু করো');
-  renderInteractiveList('resourceList', currentContent.resources || [], '📖 ক্লিক করে পড়ো');
+  renderInteractiveList('resourceList', currentContent.resources || [], '📖 ক্লিক করে পড়ো');
 }
 
 function renderQuotes(quotes) {
@@ -149,9 +149,9 @@ function initSupportForm() {
       await Promise.race([ addDoc(collection(db, 'messages'), payload), timeoutPromise ]);
       
       form.reset();
-      status.textContent = 'তোমার message নেওয়া হয়েছে। আমরা সাথে আছি।'; status.style.color = '#10b981';
+      status.textContent = 'তোমার message নেওয়া হয়েছে। আমরা সাথে আছি।'; status.style.color = '#10b981';
     } catch (err) {
-      status.textContent = `Message পাঠানো যায়নি। (কারণ: ${err.message})`; status.classList.add('error'); status.style.color = '#ef4444';
+      status.textContent = `Message পাঠানো যায়নি। (কারণ: ${err.message})`; status.classList.add('error'); status.style.color = '#ef4444';
     }
   });
 }
@@ -222,9 +222,7 @@ function initJournal() {
   }
 }
 
-// --- NEW FEATURES & LIVE CALL LOGIC ---
 function initNewFeatures() {
-  // SOS Logic
   const sosBtn = document.getElementById('sosButton');
   const sosOverlay = document.getElementById('sosOverlay');
   const closeSos = document.getElementById('closeSos');
@@ -233,52 +231,93 @@ function initNewFeatures() {
     closeSos.addEventListener('click', () => sosOverlay.classList.add('hidden'));
   }
 
-  // Thought Burner Logic
   const burnBtn = document.getElementById('burnBtn');
   const burnText = document.getElementById('burnText');
   if(burnBtn && burnText) {
     burnBtn.addEventListener('click', () => {
       if(!burnText.value.trim()) return;
       burnText.classList.add('burning');
-      burnBtn.disabled = true; burnBtn.textContent = '🔥 পুড়ছে...';
+      burnBtn.disabled = true; burnBtn.textContent = '🔥 পুড়ছে...';
       setTimeout(() => {
         burnText.value = ''; burnText.classList.remove('burning');
-        burnBtn.disabled = false; burnBtn.textContent = '🔥 পুড়িয়ে ফেলো';
+        burnBtn.disabled = false; burnBtn.textContent = '🔥 পুড়িয়ে ফেলো';
       }, 1500);
     });
   }
 
-  // Flip Card
   document.querySelectorAll('.flip-card').forEach(card => {
     card.addEventListener('click', () => card.classList.toggle('flipped'));
   });
 }
 
+// 🌟 তোমার আপডেটেড লাইভ কল এবং ইমেজ আপলোড লজিক
 function initLiveCall() {
   const liveCallBtn = document.getElementById('liveCallBtn');
   const callStatusText = document.getElementById('callStatusText');
+  const fileInput = document.getElementById('callImageInput'); 
+  
   if(!liveCallBtn) return;
 
   liveCallBtn.addEventListener('click', async () => {
-    liveCallBtn.classList.add('hidden'); callStatusText.classList.remove('hidden');
-    callStatusText.textContent = 'কলিং (রিং হচ্ছে)... 🔔'; callStatusText.style.color = '#3b82f6';
-    try {
-      const callRef = await addDoc(collection(db, 'live_calls'), { user: 'User_' + Math.floor(Math.random() * 1000), status: 'ringing', createdAt: new Date() });
-      onSnapshot(doc(db, 'live_calls', callRef.id), (snap) => {
-        const data = snap.data();
-        if(data && data.status === 'accepted') {
-          callStatusText.textContent = '✅ মেন্টর কল রিসিভ করেছেন! (Video Loading...)'; callStatusText.style.color = '#10b981';
-          setTimeout(() => { window.location.href = `video_call.html?roomID=${callRef.id}&name=User`; }, 1500);
-        } else if(data && data.status === 'rejected') {
-          callStatusText.textContent = '❌ মেন্টর ব্যস্ত আছেন। একটু পর আবার চেষ্টা করুন।'; callStatusText.style.color = '#ef4444';
-          setTimeout(() => { liveCallBtn.classList.remove('hidden'); callStatusText.classList.add('hidden'); }, 5000);
+    liveCallBtn.classList.add('hidden'); 
+    callStatusText.classList.remove('hidden');
+    callStatusText.innerHTML = 'কলিং (রিং হচ্ছে)... 🔔'; 
+    callStatusText.style.color = '#3b82f6';
+
+    const initiateCall = async (base64Image) => {
+        try {
+          const callRef = await addDoc(collection(db, 'live_calls'), { 
+              user: 'User_' + Math.floor(Math.random() * 1000), 
+              status: 'ringing', 
+              attachedImage: base64Image, 
+              createdAt: new Date() 
+          });
+          
+          onSnapshot(doc(db, 'live_calls', callRef.id), (snap) => {
+            const data = snap.data();
+            if(!data) return;
+
+            if(data.status === 'accepted') {
+              callStatusText.innerHTML = "🟢 কল চলছে... <br> <span style='color: #f59e0b; font-size: 0.9rem; margin-top: 5px; display: block;'>সেশন শেষে মেন্টরের পরামর্শের জন্য অপেক্ষা করুন (Pending...) ⏳</span>";
+              window.open(`video_call.html?roomID=${callRef.id}&name=User`, '_blank');
+              
+            } else if(data.status === 'rejected') {
+              callStatusText.innerHTML = '❌ মেন্টর ব্যস্ত আছেন। একটু পর আবার চেষ্টা করুন।'; 
+              callStatusText.style.color = '#ef4444';
+              setTimeout(() => { liveCallBtn.classList.remove('hidden'); callStatusText.classList.add('hidden'); }, 5000);
+              
+            } else if (data.status === 'completed' && data.prescription) {
+              // ✅ মেন্টরের পরামর্শ ইউজারের স্ক্রিনে আলাদা বক্সে শো করানো
+              callStatusText.innerHTML = "✅ সেশন শেষ! নিচে মেন্টরের পরামর্শ দেখুন।";
+              callStatusText.style.color = '#10b981';
+              
+              const pBox = document.getElementById('myPrescriptionBox');
+              const pText = document.getElementById('myPrescriptionText');
+              if(pBox && pText) {
+                  pBox.classList.remove('hidden');
+                  pText.textContent = data.prescription;
+                  pBox.scrollIntoView({ behavior: 'smooth', block: 'center' }); // অটোমেটিক স্ক্রল করে বক্সে নিয়ে যাবে
+              }
+            }
+          });
+        } catch(err) { 
+            callStatusText.textContent = 'নেটওয়ার্ক এরর!'; 
+            callStatusText.style.color = '#ef4444'; 
         }
-      });
-    } catch(err) { callStatusText.textContent = 'নেটওয়ার্ক এরর!'; callStatusText.style.color = '#ef4444'; }
+    };
+
+    if (fileInput && fileInput.files.length > 0) {
+        callStatusText.innerHTML = 'ছবি আপলোড হচ্ছে... ⏳';
+        const reader = new FileReader();
+        reader.onloadend = () => { initiateCall(reader.result); }; 
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        initiateCall(null); 
+    }
   });
 }
 
-// --- INITIALIZATION ---
+// --- INITIALIZATION (সব ফিচার চালু করার জন্য) ---
 wireRoutes();
 if(menuToggle) menuToggle.addEventListener('click', () => mainNav.classList.toggle('open'));
 initContent();

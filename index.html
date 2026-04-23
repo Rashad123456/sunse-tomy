@@ -50,17 +50,26 @@
               <button class="btn btn-primary" data-route="support" id="heroPrimaryButton">কথা বলতে চাই</button>
               <button class="btn btn-secondary" data-route="calm" id="heroSecondaryButton">একটু শান্ত হতে চাই</button>
             </div>
-            <div class="hero-contact-row">
-              <span class="contact-chip">📞 <strong id="phoneDisplay">0969187260</strong></span>
-              <span class="contact-chip">🛡️ Privacy-first</span>
-            </div>
             
             <div class="card top-gap text-center" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05); margin-top: 30px;">
               <h3 style="color: #10b981; margin-top:0;">সরাসরি মেন্টরের সাথে কথা বলুন</h3>
               <p style="font-size: 0.9rem; color: #94a3b8;">খুব বেশি অস্থির লাগলে সরাসরি লাইভ কলে যুক্ত হতে পারেন।</p>
+              
+              <div style="margin-top: 15px; text-align: left;">
+                 <label style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px; display: block;">মেন্টরকে কোনো রিপোর্ট বা ছবি দেখাতে চাইলে দিন (Optional):</label>
+                 <input type="file" id="callImageInput" accept="image/*" style="background: rgba(0,0,0,0.3); border: 1px dashed #10b981; padding: 8px; border-radius: 8px; width: 100%; color: white; font-size: 0.9rem;">
+              </div>
+
               <div class="top-gap">
                 <button id="liveCallBtn" class="btn btn-primary" style="background-color: #10b981; width: 100%; border: none;">📞 লাইভ কল করুন</button>
                 <p id="callStatusText" class="hidden" style="color: #3b82f6; font-weight: bold; margin-top: 15px; animation: pulse 1.5s infinite;">কলিং (রিং হচ্ছে)... 🔔</p>
+              </div>
+            </div>
+
+            <div id="myPrescriptionBox" class="card top-gap hidden" style="border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); margin-top: 20px; text-align: left;">
+              <h3 style="color: #3b82f6; margin-top:0; display: flex; align-items: center; gap: 10px;">📝 মেন্টরের পরামর্শ</h3>
+              <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                <p id="myPrescriptionText" style="color: #e2e8f0; white-space: pre-wrap; margin: 0; line-height: 1.6;"></p>
               </div>
             </div>
             
